@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+	<!--
+  <AddIn Type="Command">
+    <Text>Name</Text>
+    <Description>Description</Description>
+    <Assembly>Picker.dll</Assembly>
+    <FullClassName>Command.Command</FullClassName>
+    <ClientId>32ebfb10-0788-465d-a394-0a0e85d18de2</ClientId>
+    <VendorId>Aristotelis Koulousis</VendorId>    
+  </AddIn>
+	-->
+  <AddIn Type="Application">
+    <Name>RevitTemplate</Name>
+    <Assembly>C:\Users\aris_\Desktop\RevitPanelTemplate\RevitPanel\bin\Debug\RevitPanel.dll</Assembly>
+    <FullClassName>RevitPanel.Panel</FullClassName>
+    <ClientId>270C2F6A-96D6-447B-975C-3027FE4B233E</ClientId>
+    <VendorId>Aristotelis Koulousis</VendorId>
+  </AddIn>
+</RevitAddIns>
