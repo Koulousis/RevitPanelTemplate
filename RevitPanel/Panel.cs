@@ -184,6 +184,20 @@ namespace RevitPanel
 			void ComboBox_CurrentChanged(object sender, ComboBoxCurrentChangedEventArgs e)
 			{
 				// Handle the ComboBox item selection
+				ComboBoxMember selectedMember = e.NewValue;
+
+				// Handle the selected item (e.g., perform a specific action or set a parameter)
+				switch (selectedMember.Name)
+				{
+					case "Item1":
+						TaskDialog.Show("Revit Add-in", "Hello from item 1");
+						break;
+					case "Item2":
+						TaskDialog.Show("Revit Add-in", "Hello from item 2");
+						break;
+					default:
+						break;
+				}
 			}
 		}
 
