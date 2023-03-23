@@ -49,7 +49,7 @@ namespace RevitPanel
 			CreateRibbonPushButton(ribbonPanel, addinData);
 
 			//Split buttons
-			SplitButtonAttr splitButtonAttr = new SplitButtonAttr()
+			/*SplitButtonAttr splitButtonAttr = new SplitButtonAttr()
 			{
 				Name = "splitButton",
 				Title = "button",
@@ -59,10 +59,10 @@ namespace RevitPanel
 				LargeImage = File.Exists(GetLargeImagePath("Bitmap 32x32.png")) ? new BitmapImage(new Uri(GetLargeImagePath("Bitmap 32x32.png"))) : null
 			};
 			SplitButtonData splitButtonData = CreateSplitButtonData(splitButtonAttr);
-			CreateRibbonSplitButtons(ribbonPanel, splitButtonData, new List<PushButtonData>() { addinData });
+			CreateRibbonSplitButtons(ribbonPanel, splitButtonData, new List<PushButtonData>() { addinData });*/
 
 			//Pulldown buttons
-			PulldownButtonAttr pulldownButtonAttr = new PulldownButtonAttr()
+			/*PulldownButtonAttr pulldownButtonAttr = new PulldownButtonAttr()
 			{
 				Name = "pulldownButton",
 				Title = "button",
@@ -72,11 +72,11 @@ namespace RevitPanel
 				LargeImage = File.Exists(GetLargeImagePath("Bitmap 32x32.png")) ? new BitmapImage(new Uri(GetLargeImagePath("Bitmap 32x32.png"))) : null
 			};
 			PulldownButtonData pulldownButtonData = CreatePulldownButtonData(pulldownButtonAttr);
-			CreateRibbonPulldownButtons(ribbonPanel, pulldownButtonData, new List<PushButtonData>() { addinData });
+			CreateRibbonPulldownButtons(ribbonPanel, pulldownButtonData, new List<PushButtonData>() { addinData });*/
 			
-			CreateComboBox(ribbonPanel);
+			//CreateComboBox(ribbonPanel);
 
-			CreateTextBox(ribbonPanel);
+			//CreateTextBox(ribbonPanel);
 			#endregion
 			
 			return Result.Succeeded;
