@@ -4,6 +4,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
@@ -15,11 +17,11 @@ namespace RevitPanel
 	{
 		public Result OnStartup(UIControlledApplication application)
 		{
-			string assemblyPath = @"C:\Users\aris_\Desktop\RevitCommandTemplate\RevitCommand\bin\Debug\RevitCommand.dll";
-			string className = "RevitCommand.Command";
-
 			RibbonPanel ribbonPanel = application.CreateRibbonPanel("Addins");
-			CreatePushButton(ribbonPanel);
+
+			PushBtnAttr pushBtnAttr = new PushBtnAttr("button", @"C:\Users\AKoulousis\OneDrive - Petersime NV\Bureaublad\Master\RevitCommandTemplate\RevitCommand\bin\Debug\RevitCommand.dll", "RevitCommand.Command");
+			CreatePushButton(ribbonPanel, pushBtnAttr);
+
 			CreateSplitButton(ribbonPanel);
 			CreatePulldownButton(ribbonPanel);
 			CreateComboBox(ribbonPanel);
@@ -36,12 +38,14 @@ namespace RevitPanel
 		/// <summary>
 		/// A PushButton is a simple button control that triggers an external command when clicked.
 		/// </summary>
-		void CreatePushButton(RibbonPanel ribbonPanel)
+		void CreatePushButton(RibbonPanel ribbonPanel, PushBtnAttr pushBtnAttr)
 		{
-			string assemblyPath = @"C:\Users\aris_\Desktop\RevitCommandTemplate\RevitCommand\bin\Debug\RevitCommand.dll";
-			string className = "RevitCommand.Command";
-			PushButtonData buttonData = new PushButtonData("MyButton", "My Button", assemblyPath, className);
+			PushButtonData buttonData = new PushButtonData("Push button", pushBtnAttr.Title, pushBtnAttr.AssemblyPath, pushBtnAttr.ClassName);
 			PushButton button = ribbonPanel.AddItem(buttonData) as PushButton;
+			button.ToolTip = pushBtnAttr.ToolTip;
+			button.LongDescription = pushBtnAttr.LongDescription;
+			button.Image = pushBtnAttr.Image;
+			button.LargeImage = pushBtnAttr.LargeImage;
 		}
 
 		/// <summary>
