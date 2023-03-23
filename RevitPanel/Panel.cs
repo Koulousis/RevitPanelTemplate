@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,16 +19,66 @@ namespace RevitPanel
 	{
 		public Result OnStartup(UIControlledApplication application)
 		{
+			#region Add-ins
+			//Add-in data #1
+			AddinAttr addinAttr = new AddinAttr()
+			{
+				Name = "button",
+				Title = "button",
+				AssemblyPath = @"C:\Users\AKoulousis\OneDrive - Petersime NV\Bureaublad\Master\RevitCommandTemplate\RevitCommand\bin\Debug\RevitCommand.dll",
+				ClassName = "RevitCommand.Command",
+				ToolTip = "Description",
+				LongDescription = "Long description",
+				Image = File.Exists(GetImagePath("Bitmap 16x16.png")) ? new BitmapImage(new Uri(GetImagePath("Bitmap 16x16.png"))) : null,
+				LargeImage = File.Exists(GetLargeImagePath("Bitmap 32x32.png")) ? new BitmapImage(new Uri(GetLargeImagePath("Bitmap 32x32.png"))) : null
+			};
+			PushButtonData addinData = CreateButtonData(addinAttr);
+
+			//Add-in data #2
+
+			//Add-in data #3
+
+			//Add-in data #n
+			#endregion
+
+			#region UI Elements
+			//Ribbon panel
 			RibbonPanel ribbonPanel = application.CreateRibbonPanel("Addins");
 
-			PushBtnAttr pushBtnAttr = new PushBtnAttr("button", @"C:\Users\AKoulousis\OneDrive - Petersime NV\Bureaublad\Master\RevitCommandTemplate\RevitCommand\bin\Debug\RevitCommand.dll", "RevitCommand.Command");
-			CreatePushButton(ribbonPanel, pushBtnAttr);
+			//Push buttons
+			CreateRibbonPushButton(ribbonPanel, addinData);
 
-			CreateSplitButton(ribbonPanel);
-			CreatePulldownButton(ribbonPanel);
+			//Split buttons
+			SplitButtonAttr splitButtonAttr = new SplitButtonAttr()
+			{
+				Name = "splitButton",
+				Title = "button",
+				ToolTip = "Description",
+				LongDescription = "Long description",
+				Image = File.Exists(GetImagePath("Bitmap 16x16.png")) ? new BitmapImage(new Uri(GetImagePath("Bitmap 16x16.png"))) : null,
+				LargeImage = File.Exists(GetLargeImagePath("Bitmap 32x32.png")) ? new BitmapImage(new Uri(GetLargeImagePath("Bitmap 32x32.png"))) : null
+			};
+			SplitButtonData splitButtonData = CreateSplitButtonData(splitButtonAttr);
+			CreateRibbonSplitButtons(ribbonPanel, splitButtonData, new List<PushButtonData>() { addinData });
+
+			//Pulldown buttons
+			PulldownButtonAttr pulldownButtonAttr = new PulldownButtonAttr()
+			{
+				Name = "pulldownButton",
+				Title = "button",
+				ToolTip = "Description",
+				LongDescription = "Long description",
+				Image = File.Exists(GetImagePath("Bitmap 16x16.png")) ? new BitmapImage(new Uri(GetImagePath("Bitmap 16x16.png"))) : null,
+				LargeImage = File.Exists(GetLargeImagePath("Bitmap 32x32.png")) ? new BitmapImage(new Uri(GetLargeImagePath("Bitmap 32x32.png"))) : null
+			};
+			PulldownButtonData pulldownButtonData = CreatePulldownButtonData(pulldownButtonAttr);
+			CreateRibbonPulldownButtons(ribbonPanel, pulldownButtonData, new List<PushButtonData>() { addinData });
+			
 			CreateComboBox(ribbonPanel);
-			CreateTextBox(ribbonPanel);
 
+			CreateTextBox(ribbonPanel);
+			#endregion
+			
 			return Result.Succeeded;
 		}
 
@@ -35,49 +87,81 @@ namespace RevitPanel
 			return Result.Succeeded;
 		}
 
+		#region Buttons data
+		PushButtonData CreateButtonData(AddinAttr buttonAttr)
+		{
+			PushButtonData pushButtonData = new PushButtonData(buttonAttr.Name, buttonAttr.Title, buttonAttr.AssemblyPath, buttonAttr.ClassName)
+			{
+				ToolTip = buttonAttr.ToolTip,
+				LongDescription = buttonAttr.LongDescription,
+				Image = buttonAttr.Image,
+				LargeImage = buttonAttr.LargeImage
+			};
+
+			return pushButtonData;
+		}
+
+		SplitButtonData CreateSplitButtonData(SplitButtonAttr splitButtonAttr)
+		{
+			SplitButtonData splitButtonData = new SplitButtonData(splitButtonAttr.Name, splitButtonAttr.Title)
+			{
+				ToolTip = splitButtonAttr.ToolTip,
+				LongDescription = splitButtonAttr.LongDescription,
+				Image = splitButtonAttr.Image,
+				LargeImage = splitButtonAttr.LargeImage
+			};
+
+			return splitButtonData;
+		}
+
+		PulldownButtonData CreatePulldownButtonData(PulldownButtonAttr pulldownButtonAttr)
+		{
+			PulldownButtonData pulldownButtonData = new PulldownButtonData(pulldownButtonAttr.Name, pulldownButtonAttr.Title)
+			{
+				ToolTip = pulldownButtonAttr.ToolTip,
+				LongDescription = pulldownButtonAttr.LongDescription,
+				Image = pulldownButtonAttr.Image,
+				LargeImage = pulldownButtonAttr.LargeImage
+			};
+
+			return pulldownButtonData;
+		}
+		#endregion
+
+		#region Ribbon buttons
 		/// <summary>
 		/// A PushButton is a simple button control that triggers an external command when clicked.
 		/// </summary>
-		void CreatePushButton(RibbonPanel ribbonPanel, PushBtnAttr pushBtnAttr)
+		private void CreateRibbonPushButton(RibbonPanel ribbonPanel, PushButtonData pushButtonData)
 		{
-			PushButtonData buttonData = new PushButtonData("Push button", pushBtnAttr.Title, pushBtnAttr.AssemblyPath, pushBtnAttr.ClassName);
-			PushButton button = ribbonPanel.AddItem(buttonData) as PushButton;
-			button.ToolTip = pushBtnAttr.ToolTip;
-			button.LongDescription = pushBtnAttr.LongDescription;
-			button.Image = pushBtnAttr.Image;
-			button.LargeImage = pushBtnAttr.LargeImage;
+			PushButton pushButton = ribbonPanel.AddItem(pushButtonData) as PushButton;
 		}
 
 		/// <summary>
 		/// A SplitButton is a button control that consists of two parts: a primary button and a drop-down menu.
 		/// The primary button triggers an external command, while the drop-down menu provides additional commands.
 		/// </summary>
-		void CreateSplitButton(RibbonPanel ribbonPanel)
+		private void CreateRibbonSplitButtons(RibbonPanel ribbonPanel, SplitButtonData splitButtonData, List<PushButtonData> pushButtonDatas)
 		{
-			SplitButtonData splitButtonData = new SplitButtonData("MySplitButton", "My Split Button");
 			SplitButton splitButton = ribbonPanel.AddItem(splitButtonData) as SplitButton;
-
-			// Add additional commands to the drop-down menu
-			PushButtonData buttonData1 = new PushButtonData("Command1", "Command 1", Assembly.GetExecutingAssembly().Location, "MyNamespace.Command1");
-			PushButtonData buttonData2 = new PushButtonData("Command2", "Command 2", Assembly.GetExecutingAssembly().Location, "MyNamespace.Command2");
-			splitButton.AddPushButton(buttonData1);
-			splitButton.AddPushButton(buttonData2);
+			foreach (PushButtonData pushButtonData in pushButtonDatas)
+			{
+				splitButton.AddPushButton(pushButtonData);
+			}
 		}
 
 		/// <summary>
 		/// A PulldownButton is a button control that displays a drop-down menu with additional commands when clicked.
 		/// </summary>
-		void CreatePulldownButton(RibbonPanel ribbonPanel)
+		private void CreateRibbonPulldownButtons(RibbonPanel ribbonPanel, PulldownButtonData pulldownButtonData, List<PushButtonData> pushButtonDatas)
 		{
-			PulldownButtonData pulldownButtonData = new PulldownButtonData("MyPulldownButton", "My Pulldown Button");
-			PulldownButton pulldownButton = ribbonPanel.AddItem(pulldownButtonData) as PulldownButton;
-
-			// Add additional commands to the drop-down menu
-			PushButtonData buttonData1 = new PushButtonData("Command1", "Command 1", Assembly.GetExecutingAssembly().Location, "MyNamespace.Command1");
-			PushButtonData buttonData2 = new PushButtonData("Command2", "Command 2", Assembly.GetExecutingAssembly().Location, "MyNamespace.Command2");
-			pulldownButton.AddPushButton(buttonData1);
-			pulldownButton.AddPushButton(buttonData2);
+			PulldownButton pullDownButton = ribbonPanel.AddItem(pulldownButtonData) as PulldownButton;
+			foreach (PushButtonData pushButtonData in pushButtonDatas)
+			{
+				pullDownButton.AddPushButton(pushButtonData);
+			}
 		}
+
 
 		/// <summary>
 		/// A ComboBox is a drop-down control that allows users to select an item from a list.
@@ -111,5 +195,24 @@ namespace RevitPanel
 			TextBoxData textBoxData = new TextBoxData("MyTextBox");
 			Autodesk.Revit.UI.TextBox textBox = ribbonPanel.AddItem(textBoxData) as TextBox;
 		}
+		#endregion
+
+		#region Other methods
+		private string GetImagePath(string imageName)
+		{
+			string assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+			string imagePath = Path.Combine(assemblyDirectory, "Images", imageName);
+
+			return imagePath;
+		}
+
+		private string GetLargeImagePath(string largeImageName)
+		{
+			string assemblyDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+			string largeImagePath = Path.Combine(assemblyDirectory, "LargeImages", largeImageName);
+
+			return largeImagePath;
+		}
+		#endregion
 	}
 }
